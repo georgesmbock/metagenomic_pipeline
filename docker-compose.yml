@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  fastqc:
+    image: quay.io/biocontainers/fastqc:0.11.9--0
+    volumes:
+      - ./data:/data
+      - ./results/fastqc:/results/fastqc
+    command: >
+      bash -c "
+      fastqc /data/*.gz --outdir=/results/fastqc/
+      "
+
+  kraken2:
+    image: quay.io/biocontainers/kraken2:2.1.2--pl5262h7d875b9_0 
+    volumes:
+      - ./data:/data
+      - ./results/kraken:/results/kraken
+      - ./db/kraken2:/db/kraken2
+    command: >
+      bash -c "
+      kraken2 --db /db/kraken2 \
+      --paired /data/JC1A_R1.fastqsanger.gz /data/JC1A_R2.fastqsanger.gz \
+      --report /results/kraken/JC1A_report.txt \
+      --output /results/kraken/JC1A_output.txt &&
+      kraken2 --db /db/kraken2 \
+      --paired /data/JP4D_R1.fastqsanger.gz /data/JP4D_R2.fastqsanger.gz \
+      --report /results/kraken/JP4D_report.txt \
+      --output /results/kraken/JP4D_output.txt
+      "
+
+  krona:
+    image: biocontainers/krona:v2.7.1_cv1
+    volumes:
+      - ./results/kraken:/input
+      - ./results/krona:/output
+    command: >
+      bash -c "
+      cut -f2,3 /input/JC1A_output.txt | ktImportTaxonomy -o /output/JC1A_krona.html - &&
+      cut -f2,3 /input/JP4D_output.txt | ktImportTaxonomy -o /output/JP4D_krona.html -
+      "
+
+  jupyter:
+    build: .
+    ports:
+      - "8889:8888"
+    volumes:
+      - ./data:/data
+      - ./results/fastqc:/results/fastqc
+      - ./results/kraken:/results/kraken
+      - ./results/krona:/results/krona
+      - ./notebooks:/notebooks
+    working_dir: /notebooks
