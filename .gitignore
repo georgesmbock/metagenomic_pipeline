@@ -1,2 +1,7 @@
 # Ignore raw sequencing data
-data/
+results/fastqc/*gz
+
+# Ignore db
+#db/
+
+# Ignore kraken output and input files
