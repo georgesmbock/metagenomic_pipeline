@@ -64,11 +64,11 @@ Limited statistical testing due to small sample size.
 
 Future Directions:
 
-Functional annotation of assembled contigs to link taxonomy and ecological function.
+- Functional annotation of assembled contigs to link taxonomy and ecological function.
 
-Differential abundance analysis (e.g., DESeq2).
+- Differential abundance analysis (e.g., DESeq2).
 
-Multivariate ordination (NMDS) and clustering.
+- Multivariate ordination (NMDS) and clustering.
 
 ## Citation and Acknowledgments
 If you use this repository or adapt the workflow, please cite:
