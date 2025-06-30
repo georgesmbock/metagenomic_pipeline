@@ -20,7 +20,7 @@ This repository contains a reproducible, containerized bioinformatics workflow f
 ├── requirements.txt           # Dépendances Python (si besoin)
 ├── notebooks/                 # Notebooks Jupyter pour analyses interactives
 │   ├── report_krona.ipynb
-│   ├── 02_analysis.ipynb
+│   ├── 02_Viral_Diversity_Taxonomic_Comparison_and_Ecological_Indices
 │   └── final_report.ipynb
 ├── data/
 │   ├── raw/                   # Données brutes (fastq.gz)
@@ -54,3 +54,40 @@ All analyses were conducted inside a **Docker container** to ensure reproducibil
 
 ### *Clone the repository**
 git clone https://github.com/georgesmbock/metagenomic_pipeline.git
+
+Limitations and Next Steps
+Limitations:
+
+Analyses are currently descriptive (taxonomic and diversity profiling).
+
+Limited statistical testing due to small sample size.
+
+Future Directions:
+
+Functional annotation of assembled contigs to link taxonomy and ecological function.
+
+Differential abundance analysis (e.g., DESeq2).
+
+Multivariate ordination (NMDS) and clustering.
+
+## Citation and Acknowledgments
+If you use this repository or adapt the workflow, please cite:
+
+[Your Name]. Reproducible Pipeline for Viral Community Analysis: Cuatro Ciénegas Basin Case Study. [Year].
+
+Contact: [your_email@example.com]
+
+Special thanks to the reviewers of the Stellenbosch University MSc Bioinformatics Program for considering this work.
+
+Contact
+For questions or feedback:
+
+Email: [your_email@example.com]
+
+LinkedIn: [your_linkedin_url]
+
+Last updated: 2025-06-30
+
+yaml
+Copy code
+
