@@ -73,21 +73,10 @@ Multivariate ordination (NMDS) and clustering.
 ## Citation and Acknowledgments
 If you use this repository or adapt the workflow, please cite:
 
-[Your Name]. Reproducible Pipeline for Viral Community Analysis: Cuatro Ciénegas Basin Case Study. [Year].
+[Georges Mbock Mbock]. Reproducible Pipeline for Viral Community Analysis: Cuatro Ciénegas Basin Case Study. [Year].
 
-Contact: [your_email@example.com]
+Contact: georgesmbo89@gmail.com
 
 Special thanks to the reviewers of the Stellenbosch University MSc Bioinformatics Program for considering this work.
 
-Contact
-For questions or feedback:
-
-Email: [your_email@example.com]
-
-LinkedIn: [your_linkedin_url]
-
-Last updated: 2025-06-30
-
-yaml
-Copy code
 
