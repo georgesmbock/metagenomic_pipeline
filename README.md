@@ -69,14 +69,3 @@ Future Directions:
 - Differential abundance analysis (e.g., DESeq2).
 
 - Multivariate ordination (NMDS) and clustering.
-
-## Citation and Acknowledgments
-If you use this repository or adapt the workflow, please cite:
-
-[Georges Mbock Mbock]. Reproducible Pipeline for Viral Community Analysis: Cuatro Ciénegas Basin Case Study. [Year].
-
-Contact: georgesmbo89@gmail.com
-
-Special thanks to the reviewers of the Stellenbosch University MSc Bioinformatics Program for considering this work.
-
-
