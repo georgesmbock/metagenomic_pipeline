@@ -123,3 +123,6 @@ The Kraken2 viral database used was optimized for memory efficiency but smaller 
 - Differential abundance analysis (e.g., DESeq2).
 
 - Multivariate ordination (NMDS) and clustering.
+
+---
+**Author:** Georges Christian MBOCK MBOCK,<georgesmbo89@gmail.com>
