@@ -25,7 +25,7 @@ This repository contains a reproducible, containerized bioinformatics workflow f
 │   └── downloads/                 # Download instructions for raw data
 
 ├── db/
-│   └── kraken_db/                 # Optimized Kraken2 database
+│   └── KRANKEN2_DB_DOWNLOAD.md    # Optimized Kraken2 database
 
 ├── results/                       # All output results
 │   ├── fastqc/                    # FASTQC reports
