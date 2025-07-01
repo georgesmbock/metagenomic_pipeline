@@ -93,7 +93,7 @@ type: localhost:8889/tree
 **Preliminary Quantitative Assessment of Viral Diversity Using Ecological Indices and Taxonomic Comparison of Viromes in Oligotrophic and Enriched Aquatic Environments of a Desert Oasis**
 
 ## Summary
-<p align='center'>
+<div style="text_align: justify;">
 Analyses are currently descriptive (taxonomic and diversity profiling) This project investigates the impact of nutrient enrichment on viral community diversity and taxonomic composition in aquatic ecosystems of the Cuatro Ciénegas Basin, a unique oligotrophic desert oasis in northern Mexico. 
 
 Using a dockerized viral metagenomics pipeline, raw sequencing data were quality-controlled with FastQC and classified with Kraken2 against an optimized viral database tailored for low-memory environments (≤8GB RAM). Comparative taxonomic analyses revealed distinct viral assemblages: the nutrient-enriched sample (JP4D) was dominated by Sinsheimervirus phiX174 (>50% relative abundance), while the control sample (JC1A) featured BeAn 58058 virus as the most abundant taxon (~40%). Ecological diversity metrics showed higher Shannon diversity in the enriched environment, indicating greater taxonomic richness, although dominance patterns were reflected by the Simpson index. Bray-Curtis dissimilarity (0.8231) further confirmed substantial divergence in community composition between treatments. 
@@ -103,7 +103,7 @@ These findings demonstrate that nutrient inputs reshape viral community structur
 This study contributes valuable ecological and epidemiological insights for understanding microbial responses to environmental perturbations in fragile ecosystems. 
 
 Future work will integrate functional annotation and multivariate statistical analyses to deepen these findings.
-</p>
+</div>
 ---
 ## Limitations and Next Steps
 **Limitations:**
