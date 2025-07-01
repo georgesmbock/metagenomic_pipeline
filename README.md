@@ -87,7 +87,7 @@ cd metagenomic_pipeline
 # Run
 ./main.sh
 
-# Open the your notebook by browser to make an anlysis
+# Open your notebook by browser to make an anlysis
 type: localhost:8889/tree
 ```
 ---
