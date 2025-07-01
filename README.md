@@ -42,10 +42,8 @@ This repository contains a reproducible, containerized bioinformatics workflow f
 │       ├── JC1A_krona.html
 │       └── JP4D_krona.html
 
-├── scripts/                       # Auxiliary Python/R scripts
-│   ├── download_kraken_db.sh      # Script to download Kraken2 database
-│   ├── preprocess_reads.py        # Preprocess raw sequencing reads
-│   └── generate_reports.py        # Generate summary reports
+├── scripts/                       # Auxiliary Python scripts
+│   └── download_kraken_db.sh      # Script to download Kraken2 database
 
 ├── main.sh                        # Main pipeline execution script
 
