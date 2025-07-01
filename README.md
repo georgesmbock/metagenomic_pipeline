@@ -1,5 +1,5 @@
 # Reproducible Pipeline for Viral Community Analysis: Cuatro Ciénegas Basin Case Study
-This repository contains a reproducible, containerized bioinformatics workflow for analyzing viral communities in aquatic ecosystems under nutrient enrichment. The pipeline integrates taxonomic classification, ecological diversity assessment, and visualization, applied here to publicly available sequencing data from the oligotrophic Cuatro Ciénegas Basin.
+This repository contains a reproducible, containerized bioinformatics workflow for analyzing viral communities in aquatic ecosystems under nutrient enrichment. The pipeline automates key steps such as taxonomic classification and ecological diversity assessment, and it provides an interactive environment via Jupyter Notebooks for manual exploration, visualization, and further analyses. This approach is demonstrated here using publicly available sequencing data from the oligotrophic Cuatro Ciénegas Basin.
 
 ---
 
@@ -86,6 +86,9 @@ cd metagenomic_pipeline
 
 # Run
 ./main.sh
+
+# Open the your notebook by browser to make an anlysis
+type: localhost:8889/tree
 ```
 ---
 ## Study Title
