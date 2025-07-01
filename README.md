@@ -105,6 +105,15 @@ Future work will integrate functional annotation and multivariate statistical an
 ---
 ## Limitations and Next Steps
 **Limitations:**
+
+Computational resources: 
+
+The pipeline was designed to run on hardware with limited memory (≤8 GB RAM), which restricted the use of more computationally intensive methods such as PERMANOVA and NMDS ordination.
+
+Database scope: 
+
+The Kraken2 viral database used was optimized for memory efficiency but smaller than comprehensive databases, potentially limiting the taxonomic resolution and completeness.
+
 **Future Directions:**
 - Functional annotation of assembled contigs to link taxonomy and ecological function.
 
