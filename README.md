@@ -181,4 +181,9 @@ The Kraken2 viral database used was optimized for memory efficiency but smaller 
 - Multivariate ordination (NMDS) and clustering.
 
 ---
+
+## Keywords
+`virome` · `viral metagenomics` · `Kraken2` · `Krona` · `ecological indices` · `bioinformatics` · `Docker` · `Jupyter` · `Cuatro Ciénegas` · `Shannon` · `Simpson` · `Bray-Curtis` · `manual analysis`
+
+---
 **Author:** Georges Christian MBOCK MBOCK,<georgesmbo89@gmail.com>
