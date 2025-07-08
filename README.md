@@ -54,18 +54,18 @@ Calculation of ecological diversity indices (Shannon, Simpson, Bray-Curtis)
 
 Custom visualizations (heatmaps, diversity curves, bar plots)
 
-### **Included notebooks:**
+#### **Included notebooks:**
 
-02_Viral_Diversity_Taxonomic_Comparison_and_Ecological_Indices.ipynb
+*02_Viral_Diversity_Taxonomic_Comparison_and_Ecological_Indices.ipynb*
 → Calculates diversity indices and compares sample compositions
 
-report_krona.ipynb
+*report_krona.ipynb*
 → Integrates and interprets Krona visualizations interactively
 
-Final_report.ipynb
+*Final_report.ipynb*
 → Consolidates all figures and results for final reporting
 
-**Note: These analyses are manual in version 1.0. Full automation is planned for future updates.**
+**Note: Statistical and graphical analyses are deliberately performed manually to ensure a fine-grained, user-controlled, and adaptable interpretation of the results.**
 
 ---
 
