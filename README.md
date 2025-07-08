@@ -30,7 +30,7 @@ This repository contains a reproducible, containerized bioinformatics workflow f
          └──────┬──────┘
                 │
      ┌──────────▼──────────┐
-     │ Ecological Indices  │ (Shannon, Simpson, Bray-Curtis)
+     │ Ecological Indices  │  (Manual - v1)(Shannon, Simpson, Bray-Curtis)
      └──────────┬──────────┘
                 │
           ┌─────▼─────┐
@@ -38,6 +38,34 @@ This repository contains a reproducible, containerized bioinformatics workflow f
           └───────────┘
 
 ```
+
+---
+
+## Manual and Interactive Analyses via Jupyter Notebooks
+
+While the main pipeline ensures fast and memory-efficient preprocessing and taxonomic profiling,
+the in-depth ecological and statistical analyses were conducted manually using Jupyter notebooks.
+
+These notebooks allow for:
+
+Detailed taxonomic comparisons
+
+Calculation of ecological diversity indices (Shannon, Simpson, Bray-Curtis)
+
+Custom visualizations (heatmaps, diversity curves, bar plots)
+
+### **Included notebooks:**
+
+02_Viral_Diversity_Taxonomic_Comparison_and_Ecological_Indices.ipynb
+→ Calculates diversity indices and compares sample compositions
+
+report_krona.ipynb
+→ Integrates and interprets Krona visualizations interactively
+
+Final_report.ipynb
+→ Consolidates all figures and results for final reporting
+
+**Note: These analyses are manual in version 1.0. Full automation is planned for future updates.**
 
 ---
 
