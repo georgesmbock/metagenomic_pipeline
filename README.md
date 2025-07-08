@@ -11,6 +11,36 @@ This repository contains a reproducible, containerized bioinformatics workflow f
 
 ---
 
+## Workflow Overview
+```
+           ┌────────────┐
+           │  Raw FASTQ │
+           └────┬───────┘
+                │
+         ┌──────▼──────┐
+         │   FastQC    │ (Quality Control)
+         └──────┬──────┘
+                │
+         ┌──────▼──────┐
+         │  Kraken2    │ (Taxonomic Classification)
+         └──────┬──────┘
+                │
+         ┌──────▼──────┐
+         │   Krona     │ (Interactive Visualization)
+         └──────┬──────┘
+                │
+     ┌──────────▼──────────┐
+     │ Ecological Indices  │ (Shannon, Simpson, Bray-Curtis)
+     └──────────┬──────────┘
+                │
+          ┌─────▼─────┐
+          │  Results  │ (HTML reports + Tables)
+          └───────────┘
+
+```
+
+---
+
 ## repository Structure
 ```
 /metagenomic_pipeline
