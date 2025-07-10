@@ -188,11 +188,4 @@ The Kraken2 viral database used was optimized for memory efficiency but smaller 
 
 ---
 
-## Citation
-If you use this pipeline, please cite as:
-
-Mbock Mbock, G. C. (2025). *Lightweight and reproducible virome analysis pipeline for ecological studies*. GitHub Repository. https://github.com/georgesmbock/metagenomic_pipeline
-
----
-
 **Author:** Georges Christian MBOCK MBOCK,<georgesmbo89@gmail.com>
