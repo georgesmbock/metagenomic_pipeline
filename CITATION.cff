@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this pipeline, please cite it as below."
+title: "Lightweight and reproducible virome analysis pipeline for ecological studies"
+authors:
+  - family-names: Mbock Mbock
+    given-names: Georges Christian
+    email: georgesmbo89@gmail.com
+    orcid: "https://orcid.org/0000-0000-0000-0000" ---------> nest time
+date-released: 2025-07-10
+version: "1.0.0"
+repository-code: https://github.com/georgesmbock/metagenomic_pipeline
+license: MIT
+type: software
+abstract: >
+  This repository provides a containerized, reproducible viral metagenomics pipeline 
+  for ecological studies in aquatic ecosystems under nutrient enrichment. It includes 
+  tools for quality control, taxonomic classification, ecological diversity metrics, 
+  and interactive manual analyses via Jupyter notebooks. Demonstrated on data from 
+  the Cuatro Ciénegas Basin, the pipeline emphasizes low-memory efficiency and 
+  scientific reproducibility.
