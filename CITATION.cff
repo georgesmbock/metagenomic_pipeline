@@ -5,7 +5,7 @@ authors:
   - family-names: Mbock Mbock
     given-names: Georges Christian
     email: georgesmbo89@gmail.com
-    orcid: "https://orcid.org/0000-0000-0000-0000" ---------> nest time
+    orcid: "https://orcid.org/0000-0000-0000-0000" # nest time
 date-released: 2025-07-10
 version: "1.0.0"
 repository-code: https://github.com/georgesmbock/metagenomic_pipeline
