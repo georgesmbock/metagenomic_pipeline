@@ -29,11 +29,11 @@ def main():
         root = next((r["clade_reads"] for r in report if r["rank"] == "R"), 0); total = root + unclassified
         excluded_reads = sum(r["clade_reads"] for r in report if r["taxid"] in excluded)
         denominator = max(root - excluded_reads, 0)
-        qc.append({**meta, "total_reads": total, "classified_reads": root, "unclassified_reads": unclassified,
+        qc.append({"sample": meta["sample"], "condition": meta["condition"], "replicate": meta["replicate"], "total_reads": total, "classified_reads": root, "unclassified_reads": unclassified,
                    "excluded_control_reads": excluded_reads, "classified_percent": round(100*root/total, 6) if total else 0})
         for row in report:
             if row["rank"] == "S" and row["taxid"] not in excluded:
-                abundance.append({**meta, "taxid": row["taxid"], "name": row["name"], "clade_reads": row["clade_reads"],
+                abundance.append({"sample": meta["sample"], "condition": meta["condition"], "replicate": meta["replicate"], "taxid": row["taxid"], "name": row["name"], "clade_reads": row["clade_reads"],
                                   "relative_abundance_percent": round(100*row["clade_reads"]/denominator, 8) if denominator else 0})
     args.output.parent.mkdir(parents=True, exist_ok=True)
     fields = ["sample","condition","replicate","taxid","name","clade_reads","relative_abundance_percent"]
