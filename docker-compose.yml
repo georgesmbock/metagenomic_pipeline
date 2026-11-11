@@ -9,6 +9,7 @@ services:
       - ./config:/pipeline/config:ro
       - ./data:/pipeline/data:ro
       - ./db:/pipeline/db:ro
+      - ./db/krona:/opt/conda/opt/krona/taxonomy:ro
       - ./results:/pipeline/results
       - ./logs:/pipeline/logs
     command: ["snakemake", "--snakefile", "workflow/Snakefile", "--cores", "4", "--resources", "mem_mb=7000", "--printshellcmds", "--rerun-incomplete", "--show-failed-logs"]

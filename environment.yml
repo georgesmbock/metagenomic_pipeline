@@ -2,6 +2,7 @@ name: virome-pipeline
 channels: [conda-forge, bioconda, nodefaults]
 dependencies:
   - python=3.12
+  - make
   - snakemake-minimal=8.25
   - fastqc=0.12.1
   - fastp=0.23.4

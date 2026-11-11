@@ -1,0 +1,11 @@
+.git
+.github
+.snakemake
+data/*
+!data/DATA_DOWNLOAD.md
+db/*
+!db/KRANKEN2_DB_DOWNLOAD.md
+results
+logs
+__pycache__
+*.pyc

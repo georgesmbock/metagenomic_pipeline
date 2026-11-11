@@ -43,10 +43,10 @@ rule fastqc_raw:
         r1=lambda wc: READS[wc.sample][0],
         r2=lambda wc: READS[wc.sample][1],
     output:
-        html1=f"{RESULTS}/fastqc/raw/{{sample}}_R1_fastqc.html",
-        zip1=f"{RESULTS}/fastqc/raw/{{sample}}_R1_fastqc.zip",
-        html2=f"{RESULTS}/fastqc/raw/{{sample}}_R2_fastqc.html",
-        zip2=f"{RESULTS}/fastqc/raw/{{sample}}_R2_fastqc.zip",
+        html1=f"{RESULTS}/fastqc/raw/{{sample}}_R1.fastqsanger_fastqc.html",
+        zip1=f"{RESULTS}/fastqc/raw/{{sample}}_R1.fastqsanger_fastqc.zip",
+        html2=f"{RESULTS}/fastqc/raw/{{sample}}_R2.fastqsanger_fastqc.html",
+        zip2=f"{RESULTS}/fastqc/raw/{{sample}}_R2.fastqsanger_fastqc.zip",
     threads: 2
     resources: mem_mb=1024
     log: f"{LOGS}/fastqc/raw/{{sample}}.log"
@@ -137,7 +137,7 @@ rule abundance_table:
 
 rule multiqc:
     input:
-        raw=expand(f"{RESULTS}/fastqc/raw/{{sample}}_R1_fastqc.zip", sample=SAMPLES),
+        raw=expand(f"{RESULTS}/fastqc/raw/{{sample}}_R1.fastqsanger_fastqc.zip", sample=SAMPLES),
         clean=expand(f"{RESULTS}/fastqc/clean/{{sample}}_R1_fastqc.zip", sample=SAMPLES),
         fastp=expand(f"{RESULTS}/fastp/{{sample}}.json", sample=SAMPLES),
         reports=expand(f"{RESULTS}/kraken/{{sample}}.report.tsv", sample=SAMPLES),
