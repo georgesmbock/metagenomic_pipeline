@@ -1,7 +1,16 @@
-# Ignore raw sequencing data
-results/fastqc/*gz
-
-# Ignore db
-#db/
-
-# Ignore kraken output and input files
+# Large inputs and databases
+data/*.fastq
+data/*.fastq.gz
+data/*.fq
+data/*.fq.gz
+db/kraken2/
+# Generated outputs
+results/
+logs/
+.snakemake/
+.ipynb_checkpoints/
+__pycache__/
+.DS_Store
+Thumbs.db
+!data/DATA_DOWNLOAD.md
+!db/KRANKEN2_DB_DOWNLOAD.md

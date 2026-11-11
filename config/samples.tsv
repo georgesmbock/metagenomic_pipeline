@@ -1,0 +1,3 @@
+sample	condition	replicate	r1	r2
+JC1A	control	1	data/JC1A_R1.fastqsanger.gz	data/JC1A_R2.fastqsanger.gz
+JP4D	enriched	1	data/JP4D_R1.fastqsanger.gz	data/JP4D_R2.fastqsanger.gz

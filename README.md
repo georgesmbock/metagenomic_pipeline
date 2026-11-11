@@ -1,6 +1,28 @@
-*Lightweight and reproducible virome analysis pipeline for ecological studies.*
-# Reproducible Pipeline for Viral Community Analysis: Cuatro Ciénegas Basin Case Study.
+# Professional viral metagenomics pipeline
+
+*A sample-driven, dependency-aware and reproducible workflow for ecological virome profiling.*
+
+> Version 2 uses Snakemake to enforce the execution graph. The notebooks are
+> interpretation layers and are no longer required to run the analysis.
+
 This repository contains a reproducible, containerized bioinformatics workflow for analyzing viral communities in aquatic ecosystems under nutrient enrichment. The pipeline automates key steps such as taxonomic classification and ecological diversity assessment, and it provides an interactive environment via Jupyter Notebooks for manual exploration, visualization, and further analyses. This approach is demonstrated here using publicly available sequencing data from the oligotrophic Cuatro Ciénegas Basin.
+
+## Production workflow
+
+`FASTQ → validation → FastQC(raw) → fastp → FastQC(clean) → Kraken2 → Krona → species table → MultiQC`
+
+Every rule has explicit inputs, outputs, logs, threads and memory limits. Failed
+or interrupted jobs can be resumed safely. Illumina phiX (taxid 10847) remains
+visible in the QC table but is excluded from ecological abundance calculations
+by default because it is commonly a sequencing control.
+
+### Configuration
+
+1. Register samples in `config/samples.tsv`. One row represents one biological sample.
+2. Adjust paths, resources and Kraken2 thresholds in `config/config.yaml`.
+3. Put the three Kraken2 database files in `db/kraken2/`.
+4. Do not claim condition effects without biological replicates. The bundled
+   two-sample dataset supports descriptive comparison only.
 
 ---
 
@@ -70,49 +92,21 @@ Custom visualizations (heatmaps, diversity curves, bar plots)
 
 ---
 
-## repository Structure
+## Repository structure
 ```
 /metagenomic_pipeline
-├── requirements.txt               # Python dependencies (if needed)
-
-├── notebooks/                     # Jupyter Notebooks for interactive analyses
-│   ├── report_krona.ipynb
-│   ├── 02_Viral_Diversity_Taxonomic_Comparison_and_Ecological_Indices.ipynb
-│   └── final_report.ipynb
-
-├── data/
-│   └── downloads/                 # Download instructions for raw data
-
-├── db/
-│   └── KRANKEN2_DB_DOWNLOAD.md    # Optimized Kraken2 database
-
-├── results/                       # All output results
-│   ├── fastqc/                    # FASTQC reports
-│   │   ├── JC1A_R1_fastqc.html
-│   │   ├── JC1A_R2_fastqc.html
-│   │   ├── JP4D_R1_fastqc.html
-│   │   └── JP4D_R2_fastqc.html
-│   ├── kraken/                    # Kraken2 classification outputs
-│   │   ├── JC1A_output.txt
-│   │   ├── JC1A_report.txt
-│   │   ├── JP4D_output.txt
-│   │   └── JP4D_report.txt
-│   └── krona/                     # Krona interactive visualizations
-│       ├── JC1A_krona.html
-│       └── JP4D_krona.html
-
-├── scripts/                       # Auxiliary Python scripts
-│   └── download_kraken_db.sh      # Script to download Kraken2 database
-
-├── main.sh                        # Main pipeline execution script
-
-├── Dockerfile                     # Docker container definition
-├── docker-compose.yml             # Container orchestration
-
-├── README.md                      # Complete documentation
-
-└── .gitignore                     # Exclude large files
-
+├── config/                        # Parameters and sample metadata
+├── workflow/Snakefile             # Dependency graph
+├── workflow/scripts/              # Validated helper programs
+├── data/                           # Input FASTQ files (not versioned)
+├── db/kraken2/                    # Kraken2 database (not versioned)
+├── notebooks/                     # Optional interpretation layer
+├── results/                       # Generated deliverables (not versioned)
+├── logs/                          # Per-rule execution logs
+├── environment.yml               # Pinned software environment
+├── dockerfile                     # Reproducible container image
+├── docker-compose.yml             # Pipeline and optional Jupyter services
+└── main.sh                        # Safe entry point
 ```
 ---
 
@@ -135,18 +129,28 @@ All analyses were conducted inside a **Docker container** to ensure reproducibil
 ---
 ## Quick Start
 ```
-# Clone the repository**
+# Clone the repository
 git clone https://github.com/georgesmbock/metagenomic_pipeline.git
-
-# Enter in metagenomic_pipeline
 cd metagenomic_pipeline
 
-# Run
-./main.sh
+# Download the documented FASTQ files and Kraken2 database, then run
+bash scripts/download_data.sh
+bash scripts/download_kraken_db.sh
+docker compose build
+bash main.sh
 
-# Open your notebook by browser to make an anlysis
-type: localhost:8889/tree
+# Preview the execution graph without running jobs
+bash main.sh --dry-run
+
+# Optional interactive notebooks
+docker compose --profile interactive up jupyter
+# Open http://localhost:8889
 ```
+
+Principal outputs are written to `results/`: `multiqc/multiqc_report.html`,
+per-sample Krona reports, Kraken2 reports, cleaned reads, and the tables
+`taxonomy/abundance.tsv` and `taxonomy/qc_summary.tsv`. Detailed logs are under
+`logs/`.
 ---
 ## Study Title
 **Preliminary Quantitative Assessment of Viral Diversity Using Ecological Indices and Taxonomic Comparison of Viromes in Oligotrophic and Enriched Aquatic Environments of a Desert Oasis**

@@ -1,0 +1,20 @@
+project: cuatro_cienegas_virome
+samples: config/samples.tsv
+paths:
+  kraken_db: db/kraken2
+  results: results
+  logs: logs
+resources:
+  threads: 4
+  memory_mb: 7000
+fastp:
+  qualified_quality_phred: 20
+  length_required: 50
+  detect_adapter_for_pe: true
+kraken2:
+  confidence: 0.10
+  minimum_hit_groups: 2
+  report_minimizer_data: false
+taxonomy:
+  # Illumina phiX control; reported in QC and excluded from ecology by default.
+  excluded_taxids: ["10847"]

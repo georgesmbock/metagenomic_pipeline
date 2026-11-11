@@ -1,22 +1,17 @@
-#!/bin/bash
-
-# mkdir -p db/kraken2
-
-if [ ! -f db/kraken2/hash.k2d ]; then
-    echo "Téléchargement de MiniKraken2 v1..."
-    #wget -c ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/old/minikraken2_v2_8GB_201904.tgz  db/kraken2/
-    #wget -c ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/old/minikraken2_4GB_20171018.tgz  db/kraken2
-    #wget -c ftp://ftp.ccb.jhu.edu/pub/data/kraken/indexes/minikraken_4GB_20171018.tgz db/kraken2/
-    #wget -c https://zenodo.org/record/8339700/files/k2_Human_20230629.tar.gz -O human_kraken2_20230629.tgz db/kraken2/
-    wget -c https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20210517.tar.gz -O kraken2_viral_202504.tgz db/kraken2/
-
-    echo "Extraction de MiniKraken2..."
-    #tar -xvzf db/kraken2/minikraken2_v1_8GB_201904_UPDATE.tgz -C db/kraken2/
-    #tar -xvzf db/kraken2/minikraken_4GB_2017018.tgz -C db/kraken2/
-    #tar -xvzf db/kraken2/human_kraken2_20230629.tgz db/kraken2/
-    tar -xvzf db/kraken2/kraken2_viral_202504.tgz db/kraken2/
-
-    echo "MiniKraken2 téléchargée et extraite avec succès."
-else
-    echo "La base Kraken2 existe déjà."
+#!/usr/bin/env bash
+set -Eeuo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+url="https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20210517.tar.gz"
+archive="db/k2_viral_20210517.tar.gz"
+mkdir -p db/kraken2
+if [[ -f db/kraken2/hash.k2d && -f db/kraken2/opts.k2d && -f db/kraken2/taxo.k2d ]]; then
+  echo "Kraken2 database already installed."
+  exit 0
 fi
+command -v curl >/dev/null 2>&1 || { echo "ERROR: curl is required." >&2; exit 127; }
+curl --fail --location --retry 3 --continue-at - --output "$archive" "$url"
+tar --extract --gzip --file "$archive" --directory db/kraken2
+for file in hash.k2d opts.k2d taxo.k2d; do
+  [[ -f "db/kraken2/$file" ]] || { echo "ERROR: missing $file after extraction." >&2; exit 1; }
+done
+echo "Kraken2 viral database installed in db/kraken2."

@@ -1,0 +1,150 @@
+"""Reproducible, sample-driven viral metagenomics workflow."""
+import csv
+
+configfile: "config/config.yaml"
+SAMPLE_SHEET = config["samples"]
+RESULTS = config["paths"]["results"]
+LOGS = config["paths"]["logs"]
+DB = config["paths"]["kraken_db"]
+
+with open(SAMPLE_SHEET, newline="", encoding="utf-8") as handle:
+    rows = list(csv.DictReader(handle, delimiter="\t"))
+required_columns = {"sample", "condition", "replicate", "r1", "r2"}
+if not rows or not required_columns.issubset(rows[0]):
+    raise WorkflowError(f"{SAMPLE_SHEET} must contain: {', '.join(sorted(required_columns))}")
+SAMPLES = [row["sample"] for row in rows]
+if len(SAMPLES) != len(set(SAMPLES)):
+    raise WorkflowError("Sample names must be unique")
+READS = {row["sample"]: (row["r1"], row["r2"]) for row in rows}
+
+rule all:
+    input:
+        f"{RESULTS}/multiqc/multiqc_report.html",
+        f"{RESULTS}/taxonomy/abundance.tsv",
+        f"{RESULTS}/taxonomy/qc_summary.tsv",
+        expand(f"{RESULTS}/krona/{{sample}}.html", sample=SAMPLES),
+
+rule validate_inputs:
+    input:
+        sheet=SAMPLE_SHEET,
+        db_hash=f"{DB}/hash.k2d",
+        db_opts=f"{DB}/opts.k2d",
+        db_taxo=f"{DB}/taxo.k2d",
+        reads=lambda wc: [p for s in SAMPLES for p in READS[s]],
+    output: touch(f"{RESULTS}/.inputs_validated")
+    log: f"{LOGS}/validate_inputs.log"
+    shell:
+        "mkdir -p $(dirname {log}) && python workflow/scripts/validate_inputs.py "
+        "--samples {input.sheet} --database {DB} > {log} 2>&1"
+
+rule fastqc_raw:
+    input:
+        validated=rules.validate_inputs.output,
+        r1=lambda wc: READS[wc.sample][0],
+        r2=lambda wc: READS[wc.sample][1],
+    output:
+        html1=f"{RESULTS}/fastqc/raw/{{sample}}_R1_fastqc.html",
+        zip1=f"{RESULTS}/fastqc/raw/{{sample}}_R1_fastqc.zip",
+        html2=f"{RESULTS}/fastqc/raw/{{sample}}_R2_fastqc.html",
+        zip2=f"{RESULTS}/fastqc/raw/{{sample}}_R2_fastqc.zip",
+    threads: 2
+    resources: mem_mb=1024
+    log: f"{LOGS}/fastqc/raw/{{sample}}.log"
+    shell:
+        "mkdir -p $(dirname {output.html1}) $(dirname {log}) && fastqc --threads {threads} "
+        "--outdir $(dirname {output.html1}) {input.r1} {input.r2} > {log} 2>&1"
+
+rule fastp:
+    input:
+        validated=rules.validate_inputs.output,
+        r1=lambda wc: READS[wc.sample][0],
+        r2=lambda wc: READS[wc.sample][1],
+    output:
+        r1=f"{RESULTS}/clean/{{sample}}_R1.fastq.gz",
+        r2=f"{RESULTS}/clean/{{sample}}_R2.fastq.gz",
+        html=f"{RESULTS}/fastp/{{sample}}.html",
+        json=f"{RESULTS}/fastp/{{sample}}.json",
+    params:
+        quality=config["fastp"]["qualified_quality_phred"],
+        length=config["fastp"]["length_required"],
+        adapter="--detect_adapter_for_pe" if config["fastp"]["detect_adapter_for_pe"] else "",
+    threads: config["resources"]["threads"]
+    resources: mem_mb=2048
+    log: f"{LOGS}/fastp/{{sample}}.log"
+    shell:
+        "mkdir -p $(dirname {output.r1}) $(dirname {output.html}) $(dirname {log}) && "
+        "fastp --in1 {input.r1} --in2 {input.r2} --out1 {output.r1} --out2 {output.r2} "
+        "--qualified_quality_phred {params.quality} --length_required {params.length} {params.adapter} "
+        "--thread {threads} --html {output.html} --json {output.json} > {log} 2>&1"
+
+rule fastqc_clean:
+    input: r1=rules.fastp.output.r1, r2=rules.fastp.output.r2
+    output:
+        html1=f"{RESULTS}/fastqc/clean/{{sample}}_R1_fastqc.html",
+        zip1=f"{RESULTS}/fastqc/clean/{{sample}}_R1_fastqc.zip",
+        html2=f"{RESULTS}/fastqc/clean/{{sample}}_R2_fastqc.html",
+        zip2=f"{RESULTS}/fastqc/clean/{{sample}}_R2_fastqc.zip",
+    threads: 2
+    resources: mem_mb=1024
+    log: f"{LOGS}/fastqc/clean/{{sample}}.log"
+    shell:
+        "mkdir -p $(dirname {output.html1}) $(dirname {log}) && fastqc --threads {threads} "
+        "--outdir $(dirname {output.html1}) {input.r1} {input.r2} > {log} 2>&1"
+
+rule kraken2:
+    input:
+        validated=rules.validate_inputs.output,
+        r1=rules.fastp.output.r1,
+        r2=rules.fastp.output.r2,
+    output:
+        classifications=f"{RESULTS}/kraken/{{sample}}.classifications.tsv",
+        report=f"{RESULTS}/kraken/{{sample}}.report.tsv",
+    params:
+        confidence=config["kraken2"]["confidence"],
+        hit_groups=config["kraken2"]["minimum_hit_groups"],
+        minimizers="--report-minimizer-data" if config["kraken2"]["report_minimizer_data"] else "",
+    threads: config["resources"]["threads"]
+    resources: mem_mb=config["resources"]["memory_mb"]
+    log: f"{LOGS}/kraken2/{{sample}}.log"
+    shell:
+        "mkdir -p $(dirname {output.report}) $(dirname {log}) && kraken2 --db {DB} --paired "
+        "--gzip-compressed --threads {threads} --confidence {params.confidence} "
+        "--minimum-hit-groups {params.hit_groups} {params.minimizers} --report {output.report} "
+        "--output {output.classifications} {input.r1} {input.r2} > {log} 2>&1"
+
+rule krona:
+    input: classifications=rules.kraken2.output.classifications
+    output: html=f"{RESULTS}/krona/{{sample}}.html"
+    log: f"{LOGS}/krona/{{sample}}.log"
+    shell:
+        "mkdir -p $(dirname {output.html}) $(dirname {log}) && "
+        "awk -F '\\t' '$1 == \"C\" {{print $3}}' {input.classifications} | sort | uniq -c | "
+        "awk '{{print $1 \"\\t\" $2}}' | ktImportTaxonomy -o {output.html} - > {log} 2>&1"
+
+rule abundance_table:
+    input:
+        reports=expand(f"{RESULTS}/kraken/{{sample}}.report.tsv", sample=SAMPLES),
+        sheet=SAMPLE_SHEET,
+    output:
+        abundance=f"{RESULTS}/taxonomy/abundance.tsv",
+        qc=f"{RESULTS}/taxonomy/qc_summary.tsv",
+    params: excluded=",".join(str(x) for x in config["taxonomy"]["excluded_taxids"])
+    log: f"{LOGS}/abundance_table.log"
+    shell:
+        "mkdir -p $(dirname {output.abundance}) $(dirname {log}) && python workflow/scripts/aggregate_kraken.py "
+        "--samples {input.sheet} --reports-dir {RESULTS}/kraken --output {output.abundance} "
+        "--qc-output {output.qc} --excluded-taxids '{params.excluded}' > {log} 2>&1"
+
+rule multiqc:
+    input:
+        raw=expand(f"{RESULTS}/fastqc/raw/{{sample}}_R1_fastqc.zip", sample=SAMPLES),
+        clean=expand(f"{RESULTS}/fastqc/clean/{{sample}}_R1_fastqc.zip", sample=SAMPLES),
+        fastp=expand(f"{RESULTS}/fastp/{{sample}}.json", sample=SAMPLES),
+        reports=expand(f"{RESULTS}/kraken/{{sample}}.report.tsv", sample=SAMPLES),
+    output:
+        html=f"{RESULTS}/multiqc/multiqc_report.html",
+        data=directory(f"{RESULTS}/multiqc/multiqc_data"),
+    log: f"{LOGS}/multiqc.log"
+    shell:
+        "mkdir -p $(dirname {output.html}) $(dirname {log}) && multiqc {RESULTS} --force "
+        "--outdir $(dirname {output.html}) > {log} 2>&1"
