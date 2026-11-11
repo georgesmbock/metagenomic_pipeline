@@ -14,3 +14,6 @@ __pycache__/
 Thumbs.db
 !data/DATA_DOWNLOAD.md
 !db/KRANKEN2_DB_DOWNLOAD.md
+
+data/*.fastqsanger.gz
+db/*.tar.gz
